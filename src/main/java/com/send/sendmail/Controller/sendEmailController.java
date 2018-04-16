@@ -4,6 +4,8 @@ package com.send.sendmail.Controller;
 
 import com.send.sendmail.model.EmailAdr;
 import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +24,21 @@ public class sendEmailController {
         client.setSslOn(true);
         client.setFromAdress("769091562@qq.com");
 
+        MultiPartEmail email=new MultiPartEmail();
+        try {
+            email.setAuthentication(client.getUsername(),client.getPassword());
+            email.setCharset("utf-8");
+            email.setSmtpPort(client.getSmtport());
+            email.setHostName(client.getHostName());
+            email.setSSLOnConnect(client.getSslOn());
+            email.setFrom(client.getFromAdress());
+            email.setSubject(title);
+            email.setMsg(content);
+            email.addTo(targetAddress/*"1809455381@qq.com"*/);
+            email.send();
+        } catch (EmailException e) {
+            e.printStackTrace();
+        }
 
 
         return " ";
